@@ -25,8 +25,8 @@
             --card-bg: #FFFFFF;
             --text-primary: #000000;
             --text-secondary: #8E8E93;
-            --safe-top: env(safe-area-inset-top, 20px);
-            --safe-bottom: env(safe-area-inset-bottom, 20px);
+            --safe-top: env(safe-area-inset-top, 0px);
+            --safe-bottom: env(safe-area-inset-bottom, 0px);
         }
         
         body {
@@ -36,24 +36,33 @@
             min-height: 100vh;
             min-height: 100dvh;
             overflow-x: hidden;
-            padding-bottom: calc(80px + var(--safe-bottom));
+        }
+        
+        /* Mobile: bottom nav padding */
+        @media (max-width: 767px) {
+            body {
+                padding-bottom: calc(80px + var(--safe-bottom));
+            }
         }
         
         .app-container {
-            max-width: 430px;
-            margin: 0 auto;
             background: var(--bg);
             min-height: 100vh;
             min-height: 100dvh;
         }
         
-        /* Status bar spacer */
+        /* Status bar spacer - mobile only */
         .status-bar {
             height: var(--safe-top);
             background: var(--card-bg);
         }
         
-        /* Top Navigation */
+        /* ========== HEADER (Desktop) ========== */
+        .desktop-header {
+            display: none;
+        }
+        
+        /* ========== TOP NAVIGATION ========== */
         .top-nav {
             display: flex;
             gap: 8px;
@@ -89,6 +98,10 @@
             color: white;
         }
         
+        .nav-pill:hover {
+            transform: translateY(-1px);
+        }
+        
         .nav-pill:active {
             transform: scale(0.95);
         }
@@ -109,7 +122,7 @@
             font-weight: 600;
         }
         
-        /* Search and Add Cash */
+        /* ========== SEARCH SECTION ========== */
         .search-section {
             display: flex;
             gap: 12px;
@@ -129,9 +142,10 @@
             font-size: 16px;
             cursor: pointer;
             transition: all 0.2s;
+            border: none;
         }
         
-        .search-bar:active {
+        .search-bar:hover {
             background: #E5E5EA;
         }
         
@@ -147,17 +161,21 @@
             transition: all 0.2s;
         }
         
-        .add-cash-btn:active {
-            transform: scale(0.95);
-            opacity: 0.9;
+        .add-cash-btn:hover {
+            background: #333;
+            transform: translateY(-1px);
         }
         
-        /* Main Content */
+        .add-cash-btn:active {
+            transform: scale(0.95);
+        }
+        
+        /* ========== MAIN CONTENT ========== */
         .main-content {
             padding: 0 16px;
         }
         
-        /* Balance Section */
+        /* ========== BALANCE SECTION ========== */
         .balance-section {
             padding: 20px 0;
         }
@@ -197,7 +215,7 @@
             color: var(--text-secondary);
         }
         
-        /* Chart */
+        /* ========== CHART ========== */
         .chart-container {
             background: var(--green);
             border-radius: 24px;
@@ -259,7 +277,7 @@
             50% { transform: scale(1.3); opacity: 0.8; }
         }
         
-        /* Time Filters */
+        /* ========== TIME FILTERS ========== */
         .time-filters {
             display: flex;
             justify-content: center;
@@ -280,21 +298,31 @@
         }
         
         .time-btn.active {
-            background: var(--bg);
+            background: var(--card-bg);
             color: var(--text-primary);
+        }
+        
+        .time-btn:hover {
+            background: var(--card-bg);
         }
         
         .time-btn:active {
             transform: scale(0.95);
         }
         
-        /* Cash Card */
+        /* ========== CARDS GRID ========== */
+        .cards-grid {
+            display: grid;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+        
+        /* ========== CASH CARD ========== */
         .cash-card {
             background: linear-gradient(135deg, #42A5F5 0%, #1E88E5 100%);
             border-radius: 20px;
             padding: 20px;
             color: white;
-            margin-bottom: 16px;
             cursor: pointer;
             transition: all 0.3s ease;
             position: relative;
@@ -309,6 +337,11 @@
             width: 100%;
             height: 100%;
             background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        }
+        
+        .cash-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 30px rgba(33, 150, 243, 0.3);
         }
         
         .cash-card:active {
@@ -359,7 +392,7 @@
             font-weight: 600;
         }
         
-        /* Bottom Navigation */
+        /* ========== BOTTOM NAVIGATION (Mobile) ========== */
         .bottom-nav {
             position: fixed;
             bottom: 0;
@@ -410,20 +443,27 @@
             color: var(--blue);
         }
         
+        .nav-icon-wrapper {
+            position: relative;
+        }
+        
+        .nav-dot {
+            display: none;
+        }
+        
         .nav-item.active .nav-dot {
+            display: block;
             width: 5px;
             height: 5px;
             background: var(--blue);
             border-radius: 50%;
             position: absolute;
             top: -2px;
+            left: 50%;
+            transform: translateX(-50%);
         }
         
-        .nav-icon-wrapper {
-            position: relative;
-        }
-        
-        /* Animations */
+        /* ========== ANIMATIONS ========== */
         @keyframes slideUp {
             from {
                 opacity: 0;
@@ -444,54 +484,358 @@
         .delay-3 { animation-delay: 0.3s; opacity: 0; }
         .delay-4 { animation-delay: 0.4s; opacity: 0; }
         
-        /* Number animation */
-        .counting {
-            transition: all 0.3s ease;
-        }
-        
-        /* Shimmer effect */
         @keyframes shimmer {
             0% { background-position: -200% 0; }
             100% { background-position: 200% 0; }
         }
         
-        .shimmer {
+        .shimmer::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
             background: linear-gradient(90deg, 
                 transparent 0%, 
-                rgba(255,255,255,0.1) 50%, 
+                rgba(255,255,255,0.15) 50%, 
                 transparent 100%);
             background-size: 200% 100%;
-            animation: shimmer 2s infinite;
+            animation: shimmer 1.5s ease-in-out;
         }
 
-        /* Desktop styles */
-        @media (min-width: 500px) {
+        /* ========================================
+           DESKTOP STYLES (768px+)
+           ======================================== */
+        @media (min-width: 768px) {
             body {
-                background: #1a1a1a;
+                background: var(--bg);
+            }
+            
+            .status-bar {
+                display: none;
+            }
+            
+            /* Desktop Header */
+            .desktop-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 16px 40px;
+                background: var(--card-bg);
+                border-bottom: 1px solid rgba(0,0,0,0.08);
+                position: sticky;
+                top: 0;
+                z-index: 100;
+            }
+            
+            .logo {
+                font-size: 24px;
+                font-weight: 700;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+            
+            .logo-icon {
+                width: 36px;
+                height: 36px;
+                background: var(--green);
+                border-radius: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 20px;
+            }
+            
+            .desktop-nav {
+                display: flex;
+                gap: 8px;
+            }
+            
+            .header-actions {
+                display: flex;
+                align-items: center;
+                gap: 16px;
+            }
+            
+            .header-search {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                padding: 10px 16px;
+                background: var(--bg);
+                border-radius: 10px;
+                color: var(--text-secondary);
+                font-size: 14px;
+                cursor: pointer;
+                min-width: 200px;
+            }
+            
+            .header-btn {
+                padding: 10px 20px;
+                background: var(--text-primary);
+                color: white;
+                border: none;
+                border-radius: 10px;
+                font-size: 14px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.2s;
+            }
+            
+            .header-btn:hover {
+                background: #333;
+            }
+            
+            .user-avatar {
+                width: 40px;
+                height: 40px;
+                background: var(--bg);
+                border-radius: 50%;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                cursor: pointer;
+            }
+            
+            /* Hide mobile elements */
+            .top-nav,
+            .search-section,
+            .bottom-nav {
+                display: none;
+            }
+            
+            /* Main layout */
+            .app-container {
+                max-width: 1400px;
+                margin: 0 auto;
+                padding: 32px 40px;
+            }
+            
+            .main-content {
+                padding: 0;
+            }
+            
+            /* Desktop grid layout */
+            .desktop-grid {
+                display: grid;
+                grid-template-columns: 1fr 380px;
+                gap: 32px;
+            }
+            
+            .main-column {
+                display: flex;
+                flex-direction: column;
+                gap: 24px;
+            }
+            
+            .side-column {
+                display: flex;
+                flex-direction: column;
+                gap: 24px;
+            }
+            
+            /* Balance card on desktop */
+            .balance-section {
+                background: var(--card-bg);
+                padding: 24px;
+                border-radius: 20px;
+                box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+            }
+            
+            .balance-amount {
+                font-size: 56px;
+            }
+            
+            .balance-amount .decimal {
+                font-size: 40px;
+            }
+            
+            /* Chart on desktop */
+            .chart-container {
+                height: 320px;
+                border-radius: 20px;
+            }
+            
+            /* Time filters */
+            .time-filters {
+                justify-content: flex-start;
+                gap: 12px;
+                margin-bottom: 0;
+            }
+            
+            .time-btn {
+                padding: 10px 20px;
+            }
+            
+            /* Cards grid on desktop */
+            .cards-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            /* Sidebar cards */
+            .sidebar-card {
+                background: var(--card-bg);
+                border-radius: 20px;
+                padding: 24px;
+                box-shadow: 0 2px 12px rgba(0,0,0,0.04);
+            }
+            
+            .sidebar-card h3 {
+                font-size: 18px;
+                margin-bottom: 16px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+            
+            .quick-actions {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .quick-action-btn {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 14px 16px;
+                background: var(--bg);
+                border: none;
+                border-radius: 12px;
+                font-size: 15px;
+                font-weight: 500;
+                cursor: pointer;
+                transition: all 0.2s;
+                text-align: left;
+            }
+            
+            .quick-action-btn:hover {
+                background: #E5E5EA;
+                transform: translateX(4px);
+            }
+            
+            .quick-action-btn .icon {
+                font-size: 20px;
+            }
+            
+            /* Recent activity */
+            .activity-list {
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+            }
+            
+            .activity-item {
+                display: flex;
+                align-items: center;
+                gap: 12px;
+                padding: 12px;
+                background: var(--bg);
+                border-radius: 12px;
+            }
+            
+            .activity-icon {
+                width: 40px;
+                height: 40px;
+                border-radius: 10px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 18px;
+            }
+            
+            .activity-icon.green { background: rgba(0, 214, 50, 0.15); }
+            .activity-icon.red { background: rgba(255, 59, 48, 0.15); }
+            
+            .activity-details {
+                flex: 1;
+            }
+            
+            .activity-title {
+                font-weight: 600;
+                font-size: 14px;
+            }
+            
+            .activity-time {
+                font-size: 12px;
+                color: var(--text-secondary);
+            }
+            
+            .activity-amount {
+                font-weight: 600;
+                font-size: 14px;
+            }
+            
+            .activity-amount.green { color: var(--green); }
+            .activity-amount.red { color: #FF3B30; }
+        }
+        
+        /* Large desktop */
+        @media (min-width: 1200px) {
+            .desktop-header {
+                padding: 16px 60px;
             }
             
             .app-container {
-                margin-top: 20px;
-                border-radius: 40px;
-                overflow: hidden;
-                box-shadow: 0 25px 80px rgba(0,0,0,0.5);
-                min-height: calc(100vh - 40px);
-            }
-            
-            .bottom-nav {
-                max-width: 430px;
-                left: 50%;
-                transform: translateX(-50%);
-                border-radius: 0 0 40px 40px;
+                padding: 40px 60px;
             }
         }
     </style>
 </head>
 <body>
+    <!-- Desktop Header -->
+    <header class="desktop-header">
+        <div class="logo">
+            <div class="logo-icon">📈</div>
+            Trading
+        </div>
+        <nav class="desktop-nav">
+            <button class="nav-pill active">
+                <span class="icon">🏠</span>
+                Home
+            </button>
+            <button class="nav-pill">
+                <span class="icon">🔶</span>
+                Perps
+            </button>
+            <button class="nav-pill">
+                <span class="icon">💰</span>
+                Cash
+                <span class="badge">New</span>
+            </button>
+            <button class="nav-pill">
+                <span class="icon">📊</span>
+                Markets
+            </button>
+            <button class="nav-pill">
+                <span class="icon">🔄</span>
+                Swap
+            </button>
+        </nav>
+        <div class="header-actions">
+            <div class="header-search">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <path d="M21 21l-4.35-4.35"></path>
+                </svg>
+                Search markets...
+            </div>
+            <button class="header-btn">Add cash</button>
+            <div class="user-avatar">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8E8E93" stroke-width="2">
+                    <circle cx="12" cy="8" r="5"></circle>
+                    <path d="M20 21a8 8 0 1 0-16 0"></path>
+                </svg>
+            </div>
+        </div>
+    </header>
+
     <div class="app-container">
         <div class="status-bar"></div>
         
-        <!-- Top Navigation -->
+        <!-- Mobile Top Navigation -->
         <nav class="top-nav">
             <button class="nav-pill active">
                 <span class="icon">🏠</span>
@@ -516,7 +860,7 @@
             </button>
         </nav>
         
-        <!-- Search Section -->
+        <!-- Mobile Search Section -->
         <div class="search-section">
             <div class="search-bar">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -528,59 +872,124 @@
             <button class="add-cash-btn">Add cash</button>
         </div>
         
-        <!-- Main Content -->
-        <div class="main-content">
-            <!-- Balance Section -->
-            <div class="balance-section animate-in delay-1">
-                <div class="balance-label">Balance</div>
-                <div class="balance-amount">
-                    $<span class="balance-dollars">126</span><span class="decimal">.<span class="balance-cents">82</span></span>
-                </div>
-                <div class="balance-change">
-                    <span class="percent">↑100.00%</span>
-                    <span class="period">past month</span>
+        <!-- Desktop Grid Layout -->
+        <div class="desktop-grid">
+            <div class="main-column">
+                <!-- Main Content -->
+                <div class="main-content">
+                    <!-- Balance Section -->
+                    <div class="balance-section animate-in delay-1">
+                        <div class="balance-label">Balance</div>
+                        <div class="balance-amount">
+                            $<span class="balance-dollars">126</span><span class="decimal">.<span class="balance-cents">82</span></span>
+                        </div>
+                        <div class="balance-change">
+                            <span class="percent">↑100.00%</span>
+                            <span class="period">past month</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Chart -->
+                    <div class="chart-container animate-in delay-2">
+                        <div class="chart-line">
+                            <svg class="chart-svg" viewBox="0 0 300 150" preserveAspectRatio="none">
+                                <path class="chart-path" d="M0,140 C20,140 30,130 50,120 C70,110 90,100 110,90 C130,80 150,85 170,75 C190,65 210,70 230,50 C250,30 270,20 290,15 L300,10" />
+                            </svg>
+                        </div>
+                        <div class="chart-dot"></div>
+                        <div class="chart-grid"></div>
+                    </div>
+                    
+                    <!-- Time Filters -->
+                    <div class="time-filters animate-in delay-3">
+                        <button class="time-btn">W</button>
+                        <button class="time-btn active">1M</button>
+                        <button class="time-btn">1Y</button>
+                    </div>
+                    
+                    <!-- Cards Grid -->
+                    <div class="cards-grid">
+                        <!-- Cash Card -->
+                        <div class="cash-card animate-in delay-4">
+                            <div class="cash-card-header">
+                                <span class="cash-card-title">Cash</span>
+                                <span class="cash-card-arrow">›</span>
+                            </div>
+                            <div class="cash-card-amount">$126.55</div>
+                            <div class="cash-card-row">
+                                <span class="perps-label">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                        <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
+                                        <polyline points="16 7 22 7 22 13"></polyline>
+                                    </svg>
+                                    Perps
+                                </span>
+                                <span class="perps-amount">$109.20</span>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
             
-            <!-- Chart -->
-            <div class="chart-container animate-in delay-2">
-                <div class="chart-line">
-                    <svg class="chart-svg" viewBox="0 0 300 150" preserveAspectRatio="none">
-                        <path class="chart-path" d="M0,140 C20,140 30,130 50,120 C70,110 90,100 110,90 C130,80 150,85 170,75 C190,65 210,70 230,50 C250,30 270,20 290,15 L300,10" />
-                    </svg>
+            <!-- Sidebar (Desktop only) -->
+            <div class="side-column">
+                <!-- Quick Actions -->
+                <div class="sidebar-card">
+                    <h3>⚡ Quick Actions</h3>
+                    <div class="quick-actions">
+                        <button class="quick-action-btn">
+                            <span class="icon">💳</span>
+                            Deposit funds
+                        </button>
+                        <button class="quick-action-btn">
+                            <span class="icon">📤</span>
+                            Withdraw
+                        </button>
+                        <button class="quick-action-btn">
+                            <span class="icon">🔄</span>
+                            Swap tokens
+                        </button>
+                        <button class="quick-action-btn">
+                            <span class="icon">📊</span>
+                            Open position
+                        </button>
+                    </div>
                 </div>
-                <div class="chart-dot"></div>
-                <div class="chart-grid"></div>
-            </div>
-            
-            <!-- Time Filters -->
-            <div class="time-filters animate-in delay-3">
-                <button class="time-btn">W</button>
-                <button class="time-btn active">1M</button>
-                <button class="time-btn">1Y</button>
-            </div>
-            
-            <!-- Cash Card -->
-            <div class="cash-card animate-in delay-4" onclick="this.classList.add('shimmer'); setTimeout(() => this.classList.remove('shimmer'), 2000)">
-                <div class="cash-card-header">
-                    <span class="cash-card-title">Cash</span>
-                    <span class="cash-card-arrow">›</span>
-                </div>
-                <div class="cash-card-amount">$126.55</div>
-                <div class="cash-card-row">
-                    <span class="perps-label">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <polyline points="22 7 13.5 15.5 8.5 10.5 2 17"></polyline>
-                            <polyline points="16 7 22 7 22 13"></polyline>
-                        </svg>
-                        Perps
-                    </span>
-                    <span class="perps-amount">$109.20</span>
+                
+                <!-- Recent Activity -->
+                <div class="sidebar-card">
+                    <h3>📋 Recent Activity</h3>
+                    <div class="activity-list">
+                        <div class="activity-item">
+                            <div class="activity-icon green">📈</div>
+                            <div class="activity-details">
+                                <div class="activity-title">Long ETH-USD</div>
+                                <div class="activity-time">2 hours ago</div>
+                            </div>
+                            <div class="activity-amount green">+$24.50</div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon green">💰</div>
+                            <div class="activity-details">
+                                <div class="activity-title">Deposit</div>
+                                <div class="activity-time">Yesterday</div>
+                            </div>
+                            <div class="activity-amount green">+$100.00</div>
+                        </div>
+                        <div class="activity-item">
+                            <div class="activity-icon red">📉</div>
+                            <div class="activity-details">
+                                <div class="activity-title">Short BTC-USD</div>
+                                <div class="activity-time">2 days ago</div>
+                            </div>
+                            <div class="activity-amount red">-$12.30</div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         
-        <!-- Bottom Navigation -->
+        <!-- Mobile Bottom Navigation -->
         <nav class="bottom-nav">
             <button class="nav-item active">
                 <div class="nav-icon-wrapper">
@@ -651,7 +1060,7 @@
             }, 500);
         });
         
-        // Tab switching
+        // Tab switching (both mobile and desktop)
         document.querySelectorAll('.nav-pill').forEach(pill => {
             pill.addEventListener('click', () => {
                 document.querySelectorAll('.nav-pill').forEach(p => p.classList.remove('active'));
@@ -675,7 +1084,15 @@
             });
         });
         
-        // Pull to refresh simulation
+        // Card shimmer on click
+        document.querySelectorAll('.cash-card').forEach(card => {
+            card.addEventListener('click', () => {
+                card.classList.add('shimmer');
+                setTimeout(() => card.classList.remove('shimmer'), 1500);
+            });
+        });
+        
+        // Pull to refresh simulation (mobile only)
         let startY = 0;
         let pulling = false;
         
@@ -688,18 +1105,17 @@
         
         document.addEventListener('touchmove', (e) => {
             if (pulling && e.touches[0].pageY - startY > 100) {
-                // Trigger refresh animation
                 document.querySelector('.balance-section').style.transform = 'translateY(10px)';
             }
         });
         
         document.addEventListener('touchend', () => {
-            pulling = false;
-            document.querySelector('.balance-section').style.transform = '';
-            
-            // Re-animate values
-            animateValue(document.querySelector('.balance-dollars'), 0, 126, 800);
-            animateValue(document.querySelector('.balance-cents'), 0, 82, 800);
+            if (pulling) {
+                pulling = false;
+                document.querySelector('.balance-section').style.transform = '';
+                animateValue(document.querySelector('.balance-dollars'), 0, 126, 800);
+                animateValue(document.querySelector('.balance-cents'), 0, 82, 800);
+            }
         });
     </script>
 </body>
